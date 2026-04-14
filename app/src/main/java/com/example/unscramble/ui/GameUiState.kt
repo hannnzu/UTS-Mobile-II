@@ -15,9 +15,13 @@
  */
 package com.example.unscramble.ui
 
+import androidx.room.Entity
+
 /**
  * Data class that represents the game UI state
  */
+
+@Entity("game_ui_state")
 data class GameUiState(
     val currentScrambledWord: String = "",
     val currentWordCount: Int = 1,
