@@ -28,8 +28,14 @@ import com.example.unscramble.data.AppDatabase
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import com.example.unscramble.ui.GameScreen
 import com.example.unscramble.ui.GameViewModel
+import com.example.unscramble.ui.HistoryScreen
 import com.example.unscramble.ui.theme.UnscrambleTheme
 
 class MainActivity : ComponentActivity() {
@@ -58,7 +64,20 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                 ) {
                     val gameViewModel: GameViewModel = viewModel(factory = factory)
-                    GameScreen(gameViewModel = gameViewModel)
+                    var showHistory by remember { mutableStateOf(false) }
+
+                    if (showHistory) {
+                        val allGuesses by gameViewModel.allGuesses.collectAsState()
+                        HistoryScreen(
+                            allGuesses = allGuesses,
+                            onNavigateBack = { showHistory = false }
+                        )
+                    } else {
+                        GameScreen(
+                            gameViewModel = gameViewModel,
+                            onNavigateToHistory = { showHistory = true }
+                        )
+                    }
                 }
             }
         }
