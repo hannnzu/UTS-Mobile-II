@@ -25,7 +25,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.room.Room
 import com.example.unscramble.data.AppDatabase
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.unscramble.ui.GameScreen
+import com.example.unscramble.ui.GameViewModel
 import com.example.unscramble.ui.theme.UnscrambleTheme
 
 class MainActivity : ComponentActivity() {
@@ -40,12 +44,21 @@ class MainActivity : ComponentActivity() {
             .build()
 
         super.onCreate(savedInstanceState)
+
+        val factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return GameViewModel(db.guessDao()) as T
+            }
+        }
+
         setContent {
             UnscrambleTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    GameScreen()
+                    val gameViewModel: GameViewModel = viewModel(factory = factory)
+                    GameScreen(gameViewModel = gameViewModel)
                 }
             }
         }
