@@ -61,6 +61,7 @@ import com.example.unscramble.ui.theme.UnscrambleTheme
 @Composable
 fun GameScreen(gameViewModel: GameViewModel = viewModel()) {
     val gameUiState by gameViewModel.uiState.collectAsState()
+    val allGuesses by gameViewModel.allGuesses.collectAsState()
     val mediumPadding = dimensionResource(R.dimen.padding_medium)
 
     Column(
@@ -123,6 +124,25 @@ fun GameScreen(gameViewModel: GameViewModel = viewModel()) {
 
         GameStatus(score = gameUiState.score, modifier = Modifier.padding(20.dp))
 
+        if (allGuesses.isNotEmpty()) {
+            Text(
+                text = "Riwayat Jawaban Benar:",
+                style = typography.titleMedium,
+                modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+            )
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    allGuesses.forEach { guess ->
+                        if (guess.correctWord.isNotEmpty()) {
+                            Text(
+                                text = "- ${guess.correctWord}",
+                                style = typography.bodyLarge
+                            )
+                        }
+                    }
+                }
+            }
+        }
         if (gameUiState.isGameOver) {
             FinalScoreDialog(
                 score = gameUiState.score,
