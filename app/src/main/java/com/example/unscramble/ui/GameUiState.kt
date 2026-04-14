@@ -16,16 +16,16 @@
 package com.example.unscramble.ui
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-/**
- * Data class that represents the game UI state
- */
-
+/** Data class that represents the game UI state */
 @Entity("game_ui_state")
 data class GameUiState(
-    val currentScrambledWord: String = "",
-    val currentWordCount: Int = 1,
-    val score: Int = 0,
-    val isGuessedWordWrong: Boolean = false,
-    val isGameOver: Boolean = false
+        @PrimaryKey(autoGenerate = true) val id: Int = 0,
+        val currentScrambledWord: String = "",
+        val currentWordCount: Int = 1,
+        val score: Int = 0,
+        val isGuessedWordWrong: Boolean = false,
+        val isGameOver: Boolean = false,
+        val correctWord: String = ""
 )
